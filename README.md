@@ -1,0 +1,2 @@
+# AscTCPString
+Siv3DのTCP通信で文字列を扱うモジュール
