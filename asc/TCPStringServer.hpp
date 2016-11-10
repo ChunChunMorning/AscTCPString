@@ -126,6 +126,15 @@ namespace asc
 		/// </remarks>
 		bool readUntil(char end, String& to)
 		{
+			const auto pos = m_buffer.find(end);
+
+			if (pos != std::string::npos)
+			{
+				to = FromUTF8(m_buffer.substr(0, pos));
+				m_buffer = m_buffer.substr(pos);
+				return true;
+			}
+
 			for (;;)
 			{
 				char character;
