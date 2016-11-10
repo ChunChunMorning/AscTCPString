@@ -13,6 +13,23 @@ namespace asc
 
 	public:
 
+		bool readChar(wchar& to)
+		{
+			if (m_buffer.length() > 0)
+			{
+				to = FromUTF8(m_buffer.substr(0, 1))[0];
+				m_buffer = m_buffer.substr(1);
+			}
+
+			std::string buffer;
+
+			if (!read(buffer[0]))
+				return false;
+
+			to = FromUTF8(buffer)[0];
+			return true;
+		}
+
 		bool readString(size_t length, String& to)
 		{
 			if (m_buffer.length() >= length)
@@ -44,6 +61,11 @@ namespace asc
 
 		bool readLine(String& to)
 		{
+			return readUntil(to, '\n');
+		}
+
+		bool readUntil(String& to, char end)
+		{
 			for (;;)
 			{
 				char character;
@@ -51,7 +73,7 @@ namespace asc
 				if (!read(character))
 					return false;
 
-				if (character == '\n')
+				if (character == end)
 					break;
 
 				m_buffer.push_back(character);
