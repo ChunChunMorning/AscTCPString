@@ -73,14 +73,21 @@ namespace asc
 				if (!read(character))
 					return false;
 
+				m_buffer.push_back(character);
+
 				if (character == end)
 					break;
-
-				m_buffer.push_back(character);
 			}
 
 			to = FromUTF8(m_buffer);
+			m_buffer.clear();
 			return true;
+		}
+
+		bool sendString(const String& data)
+		{
+			const auto str = ToUTF8(data);
+			return send(str.data(), sizeof(char) * str.length());
 		}
 	};
 }
