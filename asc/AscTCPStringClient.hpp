@@ -13,43 +13,12 @@ namespace asc
 
 	public:
 
-		bool readChar(wchar& to)
-		{
-			String buffer = FromUTF8(m_buffer);
-
-			if (buffer.length > 0)
-			{
-				to = buffer[0];
-				m_buffer = ToUTF8(buffer.substr(1));
-				return true;
-			}
-
-			char character;
-
-			if(!read(character))
-				return false;
-
-			m_buffer.push_back(character);
-			buffer = FromUTF8(m_buffer);
-
-			if (buffer.length > 0)
-			{
-				to = buffer[0];
-				m_buffer = ToUTF8(buffer.substr(1));
-				return true;
-			}
-
-			return false;
-		}
-
 		bool readString(size_t length, String& to)
 		{
-			String buffer = FromUTF8(m_buffer);
-
-			if (buffer.length >= length)
+			if (m_buffer.length() >= length)
 			{
-				to = buffer.substr(0, length);
-				m_buffer = ToUTF8(buffer.substr(length));
+				to = FromUTF8(m_buffer.substr(0, length));
+				m_buffer = m_buffer.substr(length);
 				return true;
 			}
 
@@ -61,12 +30,11 @@ namespace asc
 					return false;
 
 				m_buffer.push_back(character);
-				buffer = FromUTF8(m_buffer);
 
-				if (buffer.length >= length)
+				if (m_buffer.length() >= length)
 				{
-					to = buffer.substr(0, length);
-					m_buffer = ToUTF8(buffer.substr(length));
+					to = FromUTF8(m_buffer.substr(0, length));
+					m_buffer = m_buffer.substr(length);
 					return true;
 				}
 			}
