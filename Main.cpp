@@ -1,31 +1,27 @@
 ﻿# include <Siv3D.hpp>
-# include "asc/AscTCPStringClient.hpp"
+# include "asc/TCPString.hpp"
 
 void Main()
 {
 	asc::TCPStringClient client;
-	client.connect(IPv4::localhost(), 1435);
+	client.connect(IPv4::localhost(), 50000);
+
+	Window::SetTitle(L"接続待機中...");
 
 	while (System::Update())
 	{
-		Println(L"Loop: ", System::FrameCount());
-
 		if (client.isConnected())
 		{
-			//std::string str = "Hello\n";
-			String wstr;
-			wchar wch;
+			Window::SetTitle(L"接続完了！");
 
-			//client.send(str.data(), sizeof(char) * str.length());
-			//Print(L"Send: ", Widen(str));
+			client.sendString(L"Hello\n");
+			Print(L"Send: Hello\n");
 
-			if (client.readChar(wch))
+			String str;
+
+			if (client.readLine(str))
 			{
-				Println(L"Receive: ", wch);
-			}
-			else
-			{
-				Println(L"Failed");
+				Print(L"Receive: ", str);
 			}
 		}
 
@@ -33,7 +29,9 @@ void Main()
 		{
 			client.disconnect();
 
-			client.connect(IPv4::localhost(), 1435);
+			Window::SetTitle(L"再接続待機中...");
+
+			client.connect(IPv4::localhost(), 50000);
 		}
 	}
 }
