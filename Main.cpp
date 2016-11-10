@@ -12,16 +12,16 @@ void Main()
 
 		if (client.isConnected())
 		{
-			std::string str = "Hello\n";
+			//std::string str = "Hello\n";
 			String wstr;
+			wchar wch;
 
-			client.send(str.data(), sizeof(char) * str.length());
+			//client.send(str.data(), sizeof(char) * str.length());
+			//Print(L"Send: ", Widen(str));
 
-			Print(L"Send: ", Widen(str));
-
-			if (client.readLine(wstr))
+			if (client.readChar(wch))
 			{
-				Println(L"Receive: ", wstr);
+				Println(L"Receive: ", wch);
 			}
 			else
 			{

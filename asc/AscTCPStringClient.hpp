@@ -13,6 +13,35 @@ namespace asc
 
 	public:
 
+		bool readChar(wchar& to)
+		{
+			String buffer = FromUTF8(m_buffer);
+
+			if (buffer.length > 0)
+			{
+				to = buffer[0];
+				m_buffer = ToUTF8(buffer.substr(1));
+				return true;
+			}
+
+			char character;
+
+			if(!read(character))
+				return false;
+
+			m_buffer.push_back(character);
+			buffer = FromUTF8(m_buffer);
+
+			if (buffer.length > 0)
+			{
+				to = buffer[0];
+				m_buffer = ToUTF8(buffer.substr(1));
+				return true;
+			}
+
+			return false;
+		}
+
 		bool readLine(String& to)
 		{
 			for (;;)
