@@ -7,29 +7,28 @@ namespace asc
 
 	class TCPStringClient : public TCPClient
 	{
+	private:
+
+		std::string m_buffer;
+
 	public:
 
 		bool readLine(String& to)
 		{
-			std::string buffer;
-
 			for (;;)
 			{
-				if (hasError())
-					return false;
-
 				char character;
 
 				if (!read(character))
-					continue;
+					return false;
 
 				if (character == '\n')
 					break;
 
-				buffer.push_back(character);
+				m_buffer.push_back(character);
 			}
 
-			to = FromUTF8(buffer);
+			to = FromUTF8(m_buffer);
 			return true;
 		}
 	};
