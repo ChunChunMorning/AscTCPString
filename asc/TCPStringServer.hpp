@@ -200,5 +200,18 @@ namespace asc
 			const auto str = ToUTF8(data);
 			return send(str.data(), sizeof(char) * str.length());
 		}
+
+		/// <summary>
+		/// readUntil関数で使用するバッファの中身を削除します。
+		/// </summary>
+		/// <returns>
+		/// 削除したバッファの中身
+		/// </returns>
+		String clearBuffer()
+		{
+			const auto buffer = FromUTF8(m_buffer);
+			m_buffer.clear();
+			return buffer;
+		}
 	};
 }
