@@ -42,6 +42,38 @@ namespace asc
 			return false;
 		}
 
+		bool readString(size_t length, String& to)
+		{
+			String buffer = FromUTF8(m_buffer);
+
+			if (buffer.length >= length)
+			{
+				to = buffer.substr(0, length);
+				m_buffer = ToUTF8(buffer.substr(length));
+				return true;
+			}
+
+			for(;;)
+			{
+				char character;
+
+				if (!read(character))
+					return false;
+
+				m_buffer.push_back(character);
+				buffer = FromUTF8(m_buffer);
+
+				if (buffer.length >= length)
+				{
+					to = buffer.substr(0, length);
+					m_buffer = ToUTF8(buffer.substr(length));
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		bool readLine(String& to)
 		{
 			for (;;)
