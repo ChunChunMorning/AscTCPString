@@ -8,10 +8,12 @@ void Main()
 
 	while (System::Update())
 	{
+		Println(L"Loop: ", System::FrameCount());
+
 		if (client.isConnected())
 		{
 			std::string str = "Hello\n";
-			String wstr = L"";
+			String wstr;
 
 			client.send(str.data(), sizeof(char) * str.length());
 
@@ -24,7 +26,6 @@ void Main()
 			else
 			{
 				Println(L"Failed");
-				client.disconnect();
 			}
 		}
 
