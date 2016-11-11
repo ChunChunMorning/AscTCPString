@@ -44,7 +44,7 @@ namespace asc
 			if (!read(buffer[0]))
 				return false;
 
-			to = FromUTF8(buffer)[0];
+			to = FromUTF8(std::move(buffer))[0];
 			return true;
 		}
 
@@ -148,7 +148,7 @@ namespace asc
 					break;
 			}
 
-			to = FromUTF8(m_buffer);
+			to = FromUTF8(std::move(m_buffer));
 			m_buffer.clear();
 			return true;
 		}
@@ -181,7 +181,7 @@ namespace asc
 
 			if (success)
 			{
-				to = FromUTF8(m_buffer);
+				to = FromUTF8(std::move(m_buffer));
 				m_buffer.clear();
 			}
 
@@ -214,7 +214,7 @@ namespace asc
 		/// </returns>
 		String clearBuffer()
 		{
-			const auto buffer = FromUTF8(m_buffer);
+			const auto buffer = FromUTF8(std::move(m_buffer));
 			m_buffer.clear();
 			return buffer;
 		}
