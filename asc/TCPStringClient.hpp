@@ -177,9 +177,14 @@ namespace asc
 				m_buffer.push_back(character);
 			}
 
-			to = FromUTF8(m_buffer);
-			auto success = m_buffer.empty();
-			m_buffer.clear();
+			const auto success = m_buffer.empty();
+
+			if (success)
+			{
+				to = FromUTF8(m_buffer);
+				m_buffer.clear();
+			}
+
 			return success;
 		}
 
