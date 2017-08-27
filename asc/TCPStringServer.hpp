@@ -171,7 +171,7 @@ namespace asc
 		bool sendString(const String& data)
 		{
 			const auto str = ToUTF8(data);
-			return send(str.data(), sizeof(char) * str.length());
+			return send(str.data(), sizeof(decltype(str)::value_type) * str.length());
 		}
 	};
 }
