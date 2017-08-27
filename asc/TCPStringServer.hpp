@@ -13,10 +13,6 @@ namespace asc
 	/// </remarks>
 	class TCPStringServer : public TCPServer
 	{
-	private:
-
-		std::string m_buffer;
-
 	public:
 
 		/// <summary>
@@ -33,18 +29,14 @@ namespace asc
 		/// </remarks>
 		bool readChar(wchar& to)
 		{
-			if (m_buffer.length() > 0)
-			{
-				to = FromUTF8(m_buffer.substr(0, 1))[0];
-				m_buffer = m_buffer.substr(1);
-			}
-
 			std::string buffer;
 
-			if (!read(buffer[0]))
+			if (!lookahead(buffer[0]))
 				return false;
 
+			skip(sizeof(std::string::value_type));
 			to = FromUTF8(std::move(buffer))[0];
+
 			return true;
 		}
 
@@ -65,31 +57,19 @@ namespace asc
 		/// </remarks>
 		bool readString(size_t length, String& to)
 		{
-			if (m_buffer.length() >= length)
+			std::string buffer;
+
+			buffer.resize(length);
+
+			if (!lookahead(&buffer[0], buffer.size()))
 			{
-				to = FromUTF8(m_buffer.substr(0, length));
-				m_buffer = m_buffer.substr(length);
-				return true;
+				return false;
 			}
 
-			for (;;)
-			{
-				char character;
+			skip(sizeof(std::string::value_type) * buffer.size());
+			to = FromUTF8(std::move(buffer));
 
-				if (!read(character))
-					return false;
-
-				m_buffer.push_back(character);
-
-				if (m_buffer.length() >= length)
-				{
-					to = FromUTF8(m_buffer.substr(0, length));
-					m_buffer = m_buffer.substr(length);
-					return true;
-				}
-			}
-
-			return false;
+			return true;
 		}
 
 		/// <summary>
@@ -126,30 +106,23 @@ namespace asc
 		/// </remarks>
 		bool readUntil(char end, String& to)
 		{
-			const auto pos = m_buffer.find(end);
+			std::string buffer;
 
-			if (pos != std::string::npos)
-			{
-				to = FromUTF8(m_buffer.substr(0, pos));
-				m_buffer = m_buffer.substr(pos);
-				return true;
-			}
+			buffer.resize(available());
 
-			for (;;)
-			{
-				char character;
+			if (!lookahead(&buffer[0], buffer.size()))
+				return false;
 
-				if (!read(character))
-					return false;
+			const auto pos = buffer.find(end);
 
-				m_buffer.push_back(character);
+			if (pos == buffer.npos)
+				return false;
 
-				if (character == end)
-					break;
-			}
+			buffer.resize(pos + 1);
 
-			to = FromUTF8(std::move(m_buffer));
-			m_buffer.clear();
+			skip(sizeof(std::string::value_type) * buffer.size());
+			to = FromUTF8(std::move(buffer));
+
 			return true;
 		}
 
@@ -167,25 +140,20 @@ namespace asc
 		/// </remarks>
 		bool readAll(String& to)
 		{
-			for (;;)
-			{
-				char character;
+			std::string buffer;
 
-				if (!read(character))
-					break;
+			buffer.resize(available());
 
-				m_buffer.push_back(character);
-			}
+			if (!lookahead(&buffer[0], buffer.size()))
+				return false;
 
-			const auto success = m_buffer.empty();
+			if (buffer.empty())
+				return false;
 
-			if (success)
-			{
-				to = FromUTF8(std::move(m_buffer));
-				m_buffer.clear();
-			}
+			skip(sizeof(std::string::value_type) * buffer.size());
+			to = FromUTF8(std::move(buffer));
 
-			return success;
+			return true;
 		}
 
 		/// <summary>
@@ -204,19 +172,6 @@ namespace asc
 		{
 			const auto str = ToUTF8(data);
 			return send(str.data(), sizeof(char) * str.length());
-		}
-
-		/// <summary>
-		/// readUntil関数で使用するバッファの中身を削除します。
-		/// </summary>
-		/// <returns>
-		/// 削除したバッファの中身
-		/// </returns>
-		String clearBuffer()
-		{
-			const auto buffer = FromUTF8(std::move(m_buffer));
-			m_buffer.clear();
-			return buffer;
 		}
 	};
 }
