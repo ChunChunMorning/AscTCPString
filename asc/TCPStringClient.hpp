@@ -144,25 +144,20 @@ namespace asc
 		/// </remarks>
 		bool readAll(String& to)
 		{
-			for (;;)
-			{
-				char character;
+			std::string buffer;
 
-				if (!read(character))
-					break;
+			buffer.resize(available());
 
-				m_buffer.push_back(character);
-			}
+			if (!lookahead(&buffer[0], buffer.size()))
+				return false;
 
-			const auto success = m_buffer.empty();
+			if(buffer.empty())
+				return false;
 
-			if (success)
-			{
-				to = FromUTF8(std::move(m_buffer));
-				m_buffer.clear();
-			}
+			skip(sizeof(std::string::value_type) * buffer.size());
+			to = FromUTF8(std::move(buffer));
 
-			return success;
+			return true;
 		}
 
 		/// <summary>
