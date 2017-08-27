@@ -110,30 +110,23 @@ namespace asc
 		/// </remarks>
 		bool readUntil(char end, String& to)
 		{
-			const auto pos = m_buffer.find(end);
+			std::string buffer;
 
-			if (pos != std::string::npos)
-			{
-				to = FromUTF8(m_buffer.substr(0, pos));
-				m_buffer = m_buffer.substr(pos);
-				return true;
-			}
+			buffer.resize(available());
 
-			for (;;)
-			{
-				char character;
+			if (!lookahead(&buffer[0], buffer.size()))
+				return false;
 
-				if (!read(character))
-					return false;
+			const auto pos = buffer.find(end);
 
-				m_buffer.push_back(character);
+			if(pos == buffer.npos)
+				return false;
 
-				if (character == end)
-					break;
-			}
+			buffer.resize(pos + 1);
 
-			to = FromUTF8(std::move(m_buffer));
-			m_buffer.clear();
+			skip(sizeof(std::string::value_type) * buffer.size());
+			to = FromUTF8(std::move(buffer));
+
 			return true;
 		}
 
