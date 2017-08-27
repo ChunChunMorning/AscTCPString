@@ -63,9 +63,7 @@ namespace asc
 			buffer.resize(length);
 
 			if (!lookahead(&buffer[0], buffer.size()))
-			{
 				return false;
-			}
 
 			skip(sizeof(std::string::value_type) * buffer.size());
 			to = FromUTF8(std::move(buffer));
