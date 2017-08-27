@@ -33,18 +33,14 @@ namespace asc
 		/// </remarks>
 		bool readChar(wchar& to)
 		{
-			if (m_buffer.length() > 0)
-			{
-				to = FromUTF8(m_buffer.substr(0, 1))[0];
-				m_buffer = m_buffer.substr(1);
-			}
-
 			std::string buffer;
 
-			if (!read(buffer[0]))
+			if (!lookahead(buffer[0]))
 				return false;
 
+			skip(sizeof(std::string::value_type));
 			to = FromUTF8(std::move(buffer))[0];
+
 			return true;
 		}
 
