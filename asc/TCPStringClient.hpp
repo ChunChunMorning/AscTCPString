@@ -61,31 +61,19 @@ namespace asc
 		/// </remarks>
 		bool readString(size_t length, String& to)
 		{
-			if (m_buffer.length() >= length)
+			std::string buffer;
+
+			buffer.resize(length);
+
+			if (!lookahead(&buffer[0], buffer.size()))
 			{
-				to = FromUTF8(m_buffer.substr(0, length));
-				m_buffer = m_buffer.substr(length);
-				return true;
+				return false;
 			}
 
-			for(;;)
-			{
-				char character;
+			skip(sizeof(std::string::value_type) * buffer.size());
+			to = FromUTF8(std::move(buffer));
 
-				if (!read(character))
-					return false;
-
-				m_buffer.push_back(character);
-
-				if (m_buffer.length() >= length)
-				{
-					to = FromUTF8(m_buffer.substr(0, length));
-					m_buffer = m_buffer.substr(length);
-					return true;
-				}
-			}
-
-			return false;
+			return true;
 		}
 
 		/// <summary>
