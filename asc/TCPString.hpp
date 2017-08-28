@@ -139,14 +139,14 @@ namespace asc
 		/// </remarks>
 		bool readAll(String& to)
 		{
+			if(!available())
+				return false;
+
 			std::string buffer;
 
 			buffer.resize(available());
 
 			if (!lookahead(&buffer[0], buffer.size()))
-				return false;
-
-			if (buffer.empty())
 				return false;
 
 			skip(sizeof(std::string::value_type) * buffer.size());
