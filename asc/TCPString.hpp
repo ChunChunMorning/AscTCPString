@@ -1,4 +1,4 @@
-# pragma once
+﻿# pragma once
 # include <Siv3D.hpp>
 
 namespace asc
@@ -6,10 +6,10 @@ namespace asc
 	using namespace s3d;
 
 	/// <summary>
-	/// ������𑗎�M�\�� TCPClient, TCPServer
+	/// 文字列を送受信可能な TCPClient, TCPServer
 	/// </summary>
 	/// <remarks>
-	/// ����M�� UTF-8 �ōs���܂��B
+	/// 送受信は UTF-8 で行います。
 	/// </remarks>
 	template<class Socket>
 	class TCPString : public Socket
@@ -17,16 +17,16 @@ namespace asc
 	public:
 
 		/// <summary>
-		/// 1 �����ǂݍ��݂܂��B
+		/// 1 文字読み込みます。
 		/// </summary>
 		/// <param name="to">
-		/// �ǂݍ��ݐ�
+		/// 読み込み先
 		/// </param>
 		/// <returns>
-		/// �ǂݍ��݂ɐ�������� true
+		/// 読み込みに成功すれば true
 		/// </returns>
 		/// <remarks>
-		/// ���{��Ȃǂ� 1 �o�C�g�ł͂Ȃ������͐����������܂���B
+		/// 日本語などの 1 バイトではない文字は正しく扱えません。
 		/// </remarks>
 		bool readChar(wchar& to)
 		{
@@ -42,19 +42,19 @@ namespace asc
 		}
 
 		/// <summary>
-		/// ���������w�肵�ĕ������ǂݍ��݂܂��B
+		/// 文字数を指定して文字列を読み込みます。
 		/// </summary>
 		/// <param name="length">
-		/// �ǂݍ��ޕ�����
+		/// 読み込む文字数
 		/// </param>
 		/// <param name="to">
-		/// �ǂݍ��ݐ�
+		/// 読み込み先
 		/// </param>
 		/// <returns>
-		/// �ǂݍ��݂ɐ�������� true
+		/// 読み込みに成功すれば true
 		/// </returns>
 		/// <remarks>
-		/// ���{��Ȃǂ� 1 �o�C�g�ł͂Ȃ������͐����������܂���B
+		/// 日本語などの 1 バイトではない文字は正しく扱えません。
 		/// </remarks>
 		bool readString(size_t length, String& to)
 		{
@@ -72,19 +72,19 @@ namespace asc
 		}
 
 		/// <summary>
-		/// 1 �s�ǂݍ��݂܂��B
+		/// 1 行読み込みます。
 		/// </summary>
 		/// <param name="to">
-		/// �ǂݍ��ݐ�
+		/// 読み込み先
 		/// </param>
 		/// <returns>
-		/// �ǂݍ��݂ɐ�������� true
+		/// 読み込みに成功すれば true
 		/// </returns>
 		/// <remarks>
-		/// ���{��Ȃǂ� 1 �o�C�g�ł͂Ȃ������������܂��B
+		/// 日本語などの 1 バイトではない文字も扱えます。
 		/// </remarks>
 		/// <remarks>
-		/// �E��E��E�s�E�R�E�[�E�h�E��E� LF �E��E�g�E�p�E��E��E�܂��E�B
+		/// 改行コードは LF を使用します。
 		/// </remarks>
 		bool readLine(String& to)
 		{
@@ -92,19 +92,19 @@ namespace asc
 		}
 
 		/// <summary>
-		/// �w�肵������������܂œǂݍ��݂܂��B
+		/// 指定した文字が来るまで読み込みます。
 		/// </summary>
 		/// <param name="end">
-		/// �w�肷�镶��
+		/// 指定する文字
 		/// </param>
 		/// <param name="to">
-		/// �ǂݍ��ݐ�
+		/// 読み込み先
 		/// </param>
 		/// <returns>
-		/// �ǂݍ��݂ɐ�������� true
+		/// 読み込みに成功すれば true
 		/// </returns>
 		/// <remarks>
-		/// ���{��Ȃǂ� 1 �o�C�g�ł͂Ȃ������������܂��B
+		/// 日本語などの 1 バイトではない文字も扱えます。
 		/// </remarks>
 		bool readUntil(char end, String& to)
 		{
@@ -129,19 +129,19 @@ namespace asc
 		}
 
 		/// <summary>
-		/// �w�肵�������񂪗���܂œǂݍ��݂܂��B
+		/// 指定した文字列が来るまで読み込みます。
 		/// </summary>
 		/// <param name="end">
-		/// �w�肷�镶����
+		/// 指定する文字列
 		/// </param>
 		/// <param name="to">
-		/// �ǂݍ��ݐ�
+		/// 読み込み先
 		/// </param>
 		/// <returns>
-		/// �ǂݍ��݂ɐ�������� true
+		/// 読み込みに成功すれば true
 		/// </returns>
 		/// <remarks>
-		/// ���{��Ȃǂ� 1 �o�C�g�ł͂Ȃ������������܂��B
+		/// 日本語などの 1 バイトではない文字も扱えます。
 		/// </remarks>
 		bool readUntil(const String& end, String& to)
 		{
@@ -168,16 +168,16 @@ namespace asc
 		}
 
 		/// <summary>
-		/// �������\�Ȍ���ǂݍ��݂܂��B
+		/// 文字を可能な限り読み込みます。
 		/// </summary>
 		/// <param name="to">
-		/// �ǂݍ��ݐ�
+		/// 読み込み先
 		/// </param>
 		/// <returns>
-		/// 1 �����ł��ǂݍ��݂ɐ�������� true
+		/// 1 文字でも読み込みに成功すれば true
 		/// </returns>
 		/// <remarks>
-		/// ���{��Ȃǂ� 1 �o�C�g�ł͂Ȃ������������܂��B
+		/// 日本語などの 1 バイトではない文字も扱えます。
 		/// </remarks>
 		bool readAll(String& to)
 		{
@@ -198,16 +198,16 @@ namespace asc
 		}
 
 		/// <summary>
-		/// ������𑗐M���܂��B
+		/// 文字列を送信します。
 		/// </summary>
 		/// <param name="data">
-		/// ���M���镶����
+		/// 送信する文字列
 		/// </param>
 		/// <returns>
-		/// ���M�ɐ�������� true
+		/// 送信に成功すれば true
 		/// </returns>
 		/// <remarks>
-		/// ���{��Ȃǂ� 1 �o�C�g�ł͂Ȃ������������܂��B
+		/// 日本語などの 1 バイトではない文字も扱えます。
 		/// </remarks>
 		bool sendString(const String& data)
 		{
