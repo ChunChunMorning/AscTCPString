@@ -83,6 +83,9 @@ namespace asc
 		/// <remarks>
 		/// 日本語などの 1 バイトではない文字も扱えます。
 		/// </remarks>
+		/// <remarks>
+		/// ・ｽ・ｽ・ｽs・ｽR・ｽ[・ｽh・ｽ・ｽ LF ・ｽ・ｽg・ｽp・ｽ・ｽ・ｽﾜゑｿｽ・ｽB
+		/// </remarks>
 		bool readLine(String& to)
 		{
 			return readUntil('\n', to);
