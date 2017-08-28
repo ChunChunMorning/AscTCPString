@@ -173,16 +173,13 @@ namespace asc
 		/// 読み込み先
 		/// </param>
 		/// <returns>
-		/// 1 文字でも読み込みに成功すれば true
+		/// 読み込みに成功すれば true
 		/// </returns>
 		/// <remarks>
 		/// 日本語などの 1 バイトではない文字も扱えます。
 		/// </remarks>
 		bool readAll(String& to)
 		{
-			if (!available())
-				return false;
-
 			std::string buffer;
 
 			buffer.resize(available());
