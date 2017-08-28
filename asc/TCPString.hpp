@@ -139,7 +139,7 @@ namespace asc
 		/// </remarks>
 		bool readAll(String& to)
 		{
-			if(!available())
+			if (!available())
 				return false;
 
 			std::string buffer;
