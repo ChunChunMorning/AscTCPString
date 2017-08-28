@@ -129,6 +129,45 @@ namespace asc
 		}
 
 		/// <summary>
+		/// 指定した文字列が来るまで読み込みます。
+		/// </summary>
+		/// <param name="end">
+		/// 指定する文字列
+		/// </param>
+		/// <param name="to">
+		/// 読み込み先
+		/// </param>
+		/// <returns>
+		/// 読み込みに成功すれば true
+		/// </returns>
+		/// <remarks>
+		/// 日本語などの 1 バイトではない文字も扱えます。
+		/// </remarks>
+		bool readUntil(const String& end, String& to)
+		{
+			const auto str = ToUTF8(end);
+
+			std::string buffer;
+
+			buffer.resize(available());
+
+			if (!lookahead(&buffer[0], buffer.size()))
+				return false;
+
+			const auto pos = buffer.find(str);
+
+			if (pos == buffer.npos)
+				return false;
+
+			buffer.resize(pos + str.size());
+
+			skip(sizeof(std::string::value_type) * buffer.size());
+			to = FromUTF8(std::move(buffer));
+
+			return true;
+		}
+
+		/// <summary>
 		/// 文字を可能な限り読み込みます。
 		/// </summary>
 		/// <param name="to">
