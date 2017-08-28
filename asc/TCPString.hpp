@@ -145,8 +145,6 @@ namespace asc
 		/// </remarks>
 		bool readUntil(const String& end, String& to)
 		{
-			const auto str = ToUTF8(end);
-
 			std::string buffer;
 
 			buffer.resize(available());
@@ -154,6 +152,7 @@ namespace asc
 			if (!lookahead(&buffer[0], buffer.size()))
 				return false;
 
+			const auto str = ToUTF8(end);
 			const auto pos = buffer.find(str);
 
 			if (pos == buffer.npos)
