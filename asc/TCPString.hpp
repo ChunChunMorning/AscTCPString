@@ -32,6 +32,8 @@ namespace asc
 		{
 			std::string buffer;
 
+			buffer.resize(1);
+
 			if (!lookahead(buffer[0]))
 				return false;
 
